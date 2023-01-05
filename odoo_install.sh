@@ -50,7 +50,7 @@ CybroOdoo="True"
 MuKIT="True"
 SythilTech="True"
 odoomates="True"
-openeducat="False"
+openeducat="True"
 Openworx="True"
 JayVoraSerpentCS="True"
 ##
@@ -100,21 +100,21 @@ sudo npm install -g rtlcss
 #--------------------------------------------------
 # Install Wkhtmltopdf if needed
 #--------------------------------------------------
-if [ $INSTALL_WKHTMLTOPDF = "True" ]; then
-  echo -e "\n---- Install wkhtml and place shortcuts on correct place for ODOO 13 ----"
-  #pick up correct one from x64 & x32 versions:
-  if [ "`getconf LONG_BIT`" == "64" ];then
-      _url=$WKHTMLTOX_X64
-  else
-      _url=$WKHTMLTOX_X32
-  fi
-  sudo wget $_url
-  sudo gdebi --n `basename $_url`
-  sudo ln -s /usr/local/bin/wkhtmltopdf /usr/bin
-  sudo ln -s /usr/local/bin/wkhtmltoimage /usr/bin
-else
-  echo "Wkhtmltopdf isn't installed due to the choice of the user!"
-fi
+# if [ $INSTALL_WKHTMLTOPDF = "True" ]; then
+#   echo -e "\n---- Install wkhtml and place shortcuts on correct place for ODOO 13 ----"
+#   #pick up correct one from x64 & x32 versions:
+#   if [ "`getconf LONG_BIT`" == "64" ];then
+#       _url=$WKHTMLTOX_X64
+#   else
+#       _url=$WKHTMLTOX_X32
+#   fi
+#   sudo wget $_url
+#   sudo gdebi --n `basename $_url`
+#   sudo ln -s /usr/local/bin/wkhtmltopdf /usr/bin
+#   sudo ln -s /usr/local/bin/wkhtmltoimage /usr/bin
+# else
+#   echo "Wkhtmltopdf isn't installed due to the choice of the user!"
+# fi
 
 echo -e "\n---- Create ODOO system user ----"
 sudo adduser --system --quiet --shell=/bin/bash --home=$OE_HOME --gecos 'ODOO' --group $OE_USER
@@ -440,135 +440,17 @@ fi
 
 echo -e "install odoo requirements"
  sudo pip3 install wheel
- sudo apt install libldap2-dev libsasl2-dev
- sudo pip3 install pyldap
- sudo pip3 install -r /$OE_USER/$OE_CONFIG/requirements.txt
- sudo pip3 install configparser
- sudo pip3 install future
- pip3 install num2words
- pip3 install PyXB
- pip3 install mysql-connector-python
- pip3 install -r oca/account-analytic/requirements.txt
- pip3 install -r oca/account-budgeting/requirements.txt
- pip3 install -r oca/account-closing/requirements.txt
- pip3 install -r oca/account-consolidation/requirements.txt
- pip3 install -r oca/account-financial-reporting/requirements.txt
- pip3 install -r oca/account-financial-tools/requirements.txt
- pip3 install -r oca/account-fiscal-rule/requirements.txt
- pip3 install -r oca/account-invoice-reporting/requirements.txt
- pip3 install -r oca/account-invoicing/requirements.txt
- pip3 install -r oca/account-payment/requirements.txt
- pip3 install -r oca/account-reconcile/requirements.txt
- pip3 install -r oca/bank-payment/requirements.txt
- pip3 install -r oca/bank-statement-import/requirements.txt
- pip3 install -r oca/commission/requirements.txt
- pip3 install -r oca/community-data-files/requirements.txt
- pip3 install -r oca/connector/requirements.txt
- pip3 install -r oca/connector-accountedge/requirements.txt
- pip3 install -r oca/connector-cmis/requirements.txt
- pip3 install -r oca/connector-ecommerce/requirements.txt
- pip3 install -r oca/connector-interfaces/requirements.txt
- pip3 install -r oca/connector-lims/requirements.txt
- pip3 install -r oca/connector-magento/requirements.txt
- pip3 install -r oca/connector-prestashop/requirements.txt
- pip3 install -r oca/connector-redmine/requirements.txt
- pip3 install -r oca/connector-sage/requirements.txt
- pip3 install -r oca/connector-salesforce/requirements.txt
- pip3 install -r oca/connector-telephony/requirements.txt
- pip3 install -r oca/contract/requirements.txt
- pip3 install -r oca/credit-control/requirements.txt
- pip3 install -r oca/crm/requirements.txt
- pip3 install -r oca/currency/requirements.txt
- pip3 install -r oca/data-protection/requirements.txt
- pip3 install -r oca/ddmrp/requirements.txt
- pip3 install -r oca/delivery-carrier/requirements.txt
- pip3 install -r oca/e-commerce/requirements.txt
- pip3 install -r oca/edi/requirements.txt
- pip3 install -r oca/event/requirements.txt
- pip3 install -r oca/field-service/requirements.txt
- pip3 install -r oca/geospatial/requirements.txt
- pip3 install -r oca/hr/requirements.txt
- pip3 install -r oca/hr-timesheet/requirements.txt
- pip3 install -r oca/iot/requirements.txt
- pip3 install -r oca/knowledge/requirements.txt
- pip3 install -r oca/l10n-argentina/requirements.txt
- pip3 install -r oca/l10n-belgium/requirements.txt
- pip3 install -r oca/l10n-brazil/requirements.txt
- pip3 install -r oca/l10n-canada/requirements.txt
- pip3 install -r oca/l10n-colombia/requirements.txt
- pip3 install -r oca/l10n-costa-rica/requirements.txt
- pip3 install -r oca/l10n-finland/requirements.txt
- pip3 install -r oca/l10n-france/requirements.txt
- pip3 install -r oca/l10n-germany/requirements.txt
- pip3 install -r oca/l10n-luxemburg/requirements.txt
- pip3 install -r oca/l10n-mexico/requirements.txt
- pip3 install -r oca/l10n-netherlands/requirements.txt
- pip3 install -r oca/l10n-spain/requirements.txt
- pip3 install -r oca/l10n-switzerland/requirements.txt
- pip3 install -r oca/l10n-venezuela/requirements.txt
- pip3 install -r oca/management-system/requirements.txt
- pip3 install -r oca/manufacture/requirements.txt
- pip3 install -r oca/manufacture-reporting/requirements.txt
- pip3 install -r oca/margin-analysis/requirements.txt
- pip3 install -r oca/mis-builder/requirements.txt
- pip3 install -r oca/multi-company/requirements.txt
- pip3 install -r oca/node_modules/requirements.txt
- pip3 install -r oca/operating-unit/requirements.txt
- pip3 install -r oca/partner-contact/requirements.txt
- pip3 install -r oca/pos/requirements.txt
- pip3 install -r oca/product-attribute/requirements.txt
- pip3 install -r oca/product-kitting/requirements.txt
- pip3 install -r oca/product-variant/requirements.txt
- pip3 install -r oca/project/requirements.txt
- pip3 install -r oca/project-reporting/requirements.txt
- pip3 install -r oca/purchase-reporting/requirements.txt
- pip3 install -r oca/purchase-workflow/requirements.txt
- pip3 install -r oca/queue/requirements.txt
- pip3 install -r oca/reporting-engine/requirements.txt
- pip3 install -r oca/report-print-send/requirements.txt
- pip3 install -r oca/rma/requirements.txt
- pip3 install -r oca/sale-financial/requirements.txt
- pip3 install -r oca/sale-reporting/requirements.txt
- pip3 install -r oca/sale-workflow/requirements.txt
- pip3 install -r oca/server-auth/requirements.txt
- pip3 install -r oca/server-backend/requirements.txt
- pip3 install -r oca/server-brand/requirements.txt
- pip3 install -r oca/server-env/requirements.txt
- pip3 install -r oca/server-tools/requirements.txt
- pip3 install -r oca/server-ux/requirements.txt
- pip3 install -r oca/social/requirements.txt
- pip3 install -r oca/stock-logistics-barcode/requirements.txt
- pip3 install -r oca/stock-logistics-reporting/requirements.txt
- pip3 install -r oca/stock-logistics-tracking/requirements.txt
- pip3 install -r oca/stock-logistics-transport/requirements.txt
- pip3 install -r oca/stock-logistics-warehouse/requirements.txt
- pip3 install -r oca/stock-logistics-workflow/requirements.txt
- pip3 install -r oca/vertical-community/requirements.txt
- pip3 install -r oca/vertical-construction/requirements.txt
- pip3 install -r oca/vertical-edition/requirements.txt
- pip3 install -r oca/vertical-hotel/requirements.txt
- pip3 install -r oca/vertical-isp/requirements.txt
- pip3 install -r oca/vertical-ngo/requirements.txt
- pip3 install -r oca/vertical-travel/requirements.txt
- pip3 install -r oca/web/requirements.txt
- pip3 install -r oca/webkit-tools/requirements.txt
- pip3 install -r oca/website/requirements.txt
- pip3 install -r oca/storage/requirements.txt
- pip3 install -r oca/brand/requirements.txt
- pip3 install -r oca/rest-framework/requirements.txt
- pip3 install -r oca/connector-jira/requirements.txt
- pip3 install -r oca/search-engine/requirements.txt
- pip3 install -r oca/helpdesk/requirements.txt
- pip3 install -r oca/product-pack/requirements.txt
- pip3 install -r oca/payroll/requirements.txt
- pip3 install -r oca/wms/requirements.txt
- pip3 install -r it-projects-llc/e-commerce/requirements.txt
- pip3 install -r it-projects-llc/pos-addons/requirements.txt
- pip3 install -r it-projects-llc/access-addons/requirements.txt
- pip3 install -r it-projects-llc/website-addons/requirements.txt
- pip3 install -r it-projects-llc/misc-addons/requirements.txt
- pip3 install -r it-projects-llc/odoo-saas-tools/requirements.txt
- pip3 install -r it-projects-llc/odoo-telegram/requirements.txt
+ #sudo apt install libldap2-dev libsasl2-dev
+ #sudo pip3 install pyldap
+ #sudo pip3 install -r /$OE_USER/$OE_CONFIG/requirements.txt
+ #sudo pip3 install configparser
+ #sudo pip3 install future
+ #pip3 install num2words
+ #pip3 install PyXB
+ #pip3 install mysql-connector-python
+ #pip3 install -r oca/account-analytic/requirements.txt
+ #pip3 install -r oca/account-budgeting/requirements.txt
+ 
 
 
 echo -e "* Starting Odoo Service"
