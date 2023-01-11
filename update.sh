@@ -1,11 +1,8 @@
 #! /bin/sh
  apt-get update && apt-get -y upgrade
-cd /odoo/odoo-server
-git pull
-cd /odoo/custom/CybroOdoo/CybroAddons
-git pull
-cd /odoo/custom/CybroOdoo/OpenHRMS
-git pull
+cd /odoo/odoo-server && git config --global --add safe.directory /odoo/odoo-server && git pull
+cd /odoo/custom/CybroOdoo/CybroAddons && git config --global --add safe.directory /odoo/custom/CybroOdoo/CybroAddons && git pull
+cd /odoo/custom/CybroOdoo/OpenHRMS && git config --global --add safe.directory /odoo/custom/CybroOdoo/OpenHRMS  && git pull
 cd /odoo/custom/oca/account-analytic && git config --global --add safe.directory /odoo/custom/oca/account-analytic && git pull
 cd /odoo/custom/oca/account-budgeting && git config --global --add safe.directory /odoo/custom/oca/account-budgeting && git pull
 cd /odoo/custom/oca/account-closing && git config --global --add safe.directory /odoo/custom/oca/account-closing && git pull
