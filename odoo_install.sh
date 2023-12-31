@@ -69,7 +69,7 @@ echo -e "\n---- Update Server ----"
 # universe package is for Ubuntu 18.x
 sudo add-apt-repository universe
 # libpng12-0 dependency for wkhtmltopdf
-sudo add-apt-repository "deb http://mirrors.kernel.org/ubuntu/ xenial main"
+# sudo add-apt-repository "deb http://mirrors.kernel.org/ubuntu/ xenial main"
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install libpq-dev
@@ -110,8 +110,8 @@ sudo npm install -g rtlcss
 #   fi
 #   sudo wget $_url
 #   sudo gdebi --n `basename $_url`
-#   sudo ln -s /usr/local/bin/wkhtmltopdf /usr/bin
-#   sudo ln -s /usr/local/bin/wkhtmltoimage /usr/bin
+sudo ln -s /usr/local/bin/wkhtmltopdf /usr/bin
+sudo ln -s /usr/local/bin/wkhtmltoimage /usr/bin
 # else
 #   echo "Wkhtmltopdf isn't installed due to the choice of the user!"
 # fi
