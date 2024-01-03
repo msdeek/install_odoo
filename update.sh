@@ -91,5 +91,5 @@ cd /odoo/custom/oca/web && git config --global --add safe.directory /odoo/custom
 cd /odoo/custom/oca/webkit-tools && git config --global --add safe.directory /odoo/custom/oca/webkit-tools && git pull
 cd /odoo/custom/oca/website && git config --global --add safe.directory /odoo/custom/oca/website && git pull
 cd /odoo/custom/oca/wms && git config --global --add safe.directory /odoo/custom/oca/wms && git pull
-
+cd /odoo/custom/mukit/odoo-modules && git config --global --add safe.directory /odoo/custom/mukit/odoo-modules && git pull
 reboot
