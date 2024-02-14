@@ -60,16 +60,24 @@ JayVoraSerpentCS="True"
 ## https://github.com/odoo/odoo/wiki/Wkhtmltopdf ):
 ## https://www.odoo.com/documentation/13.0/setup/install.html#debian-ubuntu
 
-WKHTMLTOX_X64="https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.$(lsb_release -c -s)_amd64.deb"
-WKHTMLTOX_X32="https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.$(lsb_release -c -s)_i386.deb"
+# Check if the operating system is Ubuntu 22.04
+if [[ $(lsb_release -r -s) == "22.04" ]]; then
+    WKHTMLTOX_X64="https://packages.ubuntu.com/jammy/wkhtmltopdf"
+    WKHTMLTOX_X32="https://packages.ubuntu.com/jammy/wkhtmltopdf"
+    #No Same link works for both 64 and 32-bit on Ubuntu 22.04
+else
+    # For older versions of Ubuntu
+    WKHTMLTOX_X64="https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.$(lsb_release -c -s)_amd64.deb"
+    WKHTMLTOX_X32="https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.$(lsb_release -c -s)_i386.deb"
+fi
 #--------------------------------------------------
 # Update Server
 #--------------------------------------------------
 echo -e "\n---- Update Server ----"
 # universe package is for Ubuntu 18.x
 sudo add-apt-repository universe
-# libpng12-0 dependency for wkhtmltopdf
-# sudo add-apt-repository "deb http://mirrors.kernel.org/ubuntu/ xenial main"
+# libpng12-0 dependency for wkhtmltopdf for older Ubuntu versions
+sudo add-apt-repository "deb http://mirrors.kernel.org/ubuntu/ xenial main"
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install libpq-dev
@@ -77,11 +85,21 @@ sudo apt-get install libpq-dev
 #--------------------------------------------------
 # Install PostgreSQL Server
 #--------------------------------------------------
-#echo -e "\n---- Install PostgreSQL Server ----"
-#sudo apt-get install postgresql postgresql-server-dev-all -y
+echo -e "\n---- Install PostgreSQL Server ----"
+if [ $INSTALL_POSTGRESQL_FOURTEEN = "True" ]; then
+    echo -e "\n---- Installing postgreSQL V14 due to the user it's choise ----"
+    sudo curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
+    sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+    sudo apt-get update
+    sudo apt-get install postgresql-16
+else
+    echo -e "\n---- Installing the default postgreSQL version based on Linux version ----"
+    sudo apt-get install postgresql postgresql-server-dev-all -y
+fi
 
-#echo -e "\n---- Creating the ODOO PostgreSQL User  ----"
-#sudo su - postgres -c "createuser -s $OE_USER" 2> /dev/null || true
+
+echo -e "\n---- Creating the ODOO PostgreSQL User  ----"
+sudo su - postgres -c "createuser -s $OE_USER" 2> /dev/null || true
 
 #--------------------------------------------------
 # Install Dependencies
@@ -100,21 +118,30 @@ sudo npm install -g rtlcss
 #--------------------------------------------------
 # Install Wkhtmltopdf if needed
 #--------------------------------------------------
-# if [ $INSTALL_WKHTMLTOPDF = "True" ]; then
-#   echo -e "\n---- Install wkhtml and place shortcuts on correct place for ODOO 13 ----"
-#   #pick up correct one from x64 & x32 versions:
-#   if [ "`getconf LONG_BIT`" == "64" ];then
-#       _url=$WKHTMLTOX_X64
-#   else
-#       _url=$WKHTMLTOX_X32
-#   fi
-#   sudo wget $_url
-#   sudo gdebi --n `basename $_url`
-sudo ln -s /usr/local/bin/wkhtmltopdf /usr/bin
-sudo ln -s /usr/local/bin/wkhtmltoimage /usr/bin
-# else
-#   echo "Wkhtmltopdf isn't installed due to the choice of the user!"
-# fi
+if [ $INSTALL_WKHTMLTOPDF = "True" ]; then
+  echo -e "\n---- Install wkhtml and place shortcuts on correct place for ODOO 13 ----"
+  #pick up correct one from x64 & x32 versions:
+  if [ "`getconf LONG_BIT`" == "64" ];then
+      _url=$WKHTMLTOX_X64
+  else
+      _url=$WKHTMLTOX_X32
+  fi
+  sudo wget $_url
+  
+
+  if [[ $(lsb_release -r -s) == "22.04" ]]; then
+    # Ubuntu 22.04 LTS
+    sudo apt install wkhtmltopdf -y
+  else
+      # For older versions of Ubuntu
+    sudo gdebi --n `basename $_url`
+  fi
+  
+  sudo ln -s /usr/local/bin/wkhtmltopdf /usr/bin
+  sudo ln -s /usr/local/bin/wkhtmltoimage /usr/bin
+else
+  echo "Wkhtmltopdf isn't installed due to the choice of the user!"
+fi
 
 echo -e "\n---- Create ODOO system user ----"
 sudo adduser --system --quiet --shell=/bin/bash --home=$OE_HOME --gecos 'ODOO' --group $OE_USER
